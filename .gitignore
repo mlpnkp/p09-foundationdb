@@ -1,0 +1,9 @@
+# local runs
+results/runs/
+*.jsonl.tmp
+
+# go
+/bin/
+
+# os
+.DS_Store
