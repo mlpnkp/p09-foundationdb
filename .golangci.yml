@@ -1,0 +1,172 @@
+version: "2"
+
+run:
+  timeout: 3m
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - ineffassign
+    - unused
+    - revive
+    - gocritic
+    - errorlint
+    - nilerr
+    - wastedassign
+    - prealloc
+    - gosec
+    - bodyclose
+    - noctx
+    - contextcheck
+    - rowserrcheck
+    - sqlclosecheck
+    - gocyclo
+    - gocognit
+    - funlen
+    - nestif
+    - dupl
+    - gochecknoglobals
+    - gochecknoinits
+    - godox
+    - forbidigo
+    - exhaustive
+    - unparam
+    - misspell
+    - nolintlint
+    - depguard
+
+  settings:
+    gocyclo:
+      min-complexity: 12
+    gocognit:
+      min-complexity: 15
+    funlen:
+      lines: 60
+      statements: 40
+    nestif:
+      min-complexity: 4
+    dupl:
+      threshold: 100
+    godox:
+      keywords:
+        - TODO
+        - FIXME
+        - HACK
+        - XXX
+    forbidigo:
+      forbid:
+        - pattern: ^fmt\.Print(f|ln)?$
+          msg: return values or log through slog; nothing prints
+        - pattern: ^panic$
+          msg: return an error
+        - pattern: ^log\.(Print|Printf|Println|Fatal|Fatalf|Fatalln|Panic|Panicf|Panicln)$
+          msg: one logger, log/slog
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    revive:
+      rules:
+        - name: context-as-argument
+        - name: context-keys-type
+        - name: error-return
+        - name: error-strings
+        - name: errorf
+        - name: indent-error-flow
+        - name: early-return
+        - name: superfluous-else
+        - name: unexported-return
+        - name: var-naming
+        - name: receiver-naming
+        - name: bool-literal-in-expr
+        - name: unused-parameter
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - performance
+        - style
+      disabled-checks:
+        - hugeParam
+        - whyNoLint
+    depguard:
+      rules:
+        domain-is-pure:
+          files:
+            - "**/internal/domain/**"
+            - "!**/*_test.go"
+          allow:
+            - $gostd
+        app-and-domain-are-infra-free:
+          files:
+            - "**/internal/app/**"
+            - "**/internal/domain/**"
+          deny:
+            - pkg: net/http
+              desc: HTTP lives in internal/transport; use cases do not know it
+            - pkg: database/sql
+              desc: SQL lives in internal/adapter; use cases see repository interfaces
+            - pkg: github.com/jackc/pgx
+              desc: Postgres lives in internal/adapter
+            - pkg: github.com/redis
+              desc: Redis lives in internal/adapter
+            - pkg: github.com/twmb/franz-go
+              desc: Kafka lives in internal/adapter
+            - pkg: google.golang.org/grpc
+              desc: gRPC lives in internal/transport
+            - pkg: github.com/apple/foundationdb
+              desc: FoundationDB lives in internal/adapter/fdbstore
+            - pkg: github.com/mlpnkp/p09-foundationdb/internal/adapter
+              desc: use cases declare interfaces, adapters implement them, never the reverse
+            - pkg: github.com/mlpnkp/p09-foundationdb/internal/transport
+              desc: transport calls use cases, never the reverse
+        transport-calls-use-cases:
+          files:
+            - "**/internal/transport/**"
+          deny:
+            - pkg: database/sql
+              desc: handlers call use cases, never storage
+            - pkg: github.com/jackc/pgx
+              desc: handlers call use cases, never storage
+            - pkg: github.com/redis
+              desc: handlers call use cases, never storage
+            - pkg: github.com/mlpnkp/p09-foundationdb/internal/adapter
+              desc: handlers depend on use cases and domain, not on adapters
+        one-logger:
+          files:
+            - "**/internal/**"
+            - "**/cmd/**"
+          deny:
+            - pkg: github.com/sirupsen/logrus
+              desc: one logger, log/slog
+            - pkg: go.uber.org/zap
+              desc: one logger, log/slog
+            - pkg: github.com/rs/zerolog
+              desc: one logger, log/slog
+
+  exclusions:
+    generated: lax
+    rules:
+      - path: _test\.go
+        linters:
+          - funlen
+          - gocyclo
+          - gocognit
+          - dupl
+          - gochecknoglobals
+          - gosec
+          - noctx
+          - forbidigo
+          - errcheck
+          - gocritic
+          - contextcheck
+      - path: ^cmd/
+        linters:
+          - forbidigo
+          - gochecknoglobals
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
