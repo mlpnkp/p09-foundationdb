@@ -1,0 +1,5 @@
+f9e42624e53efadcf846e3db029ac41a21dd9988d4567f71abb7f752bfabc59a  results/runs/smoke.jsonl
+57a34d020e6357b1e45cc6d4ce72d9f11c251bc5fc381e2eca4c8db0221182da  results/runs/trial-hot10000.jsonl
+f60c88e789129082263a231f3a6a1b9fcbe58a2107a88c7c855a3f6790fc27ad  results/runs/trial-hot100.jsonl
+4a4918dcb490122b89593b133f085ff09aaf5a5ff75623e5f096d76b6afb37dc  results/runs/trial-hot10.jsonl
+94e6057c25cc3ab7f49445771265cf4a3eccd4dca11efea3e54b7e2156624add  results/runs/trial-snapshot-hot10.jsonl
