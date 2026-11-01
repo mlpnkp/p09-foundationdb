@@ -40,8 +40,13 @@ func TestSummarize_KnownHistory(t *testing.T) {
 		}
 	}
 	near("ConflictRate", got.ConflictRate, 0.25)
+	if got.RetriedTxns != 1 {
+		t.Errorf("RetriedTxns = %d, want 1", got.RetriedTxns)
+	}
+	near("RetriedRate", got.RetriedRate, 0.5)
 	near("RetriesPerTxn", got.RetriesPerTxn, 1.0/3)
 	near("Throughput", got.Throughput, 40)
+	near("AvgConcurrency", got.AvgConcurrency, 1.8)
 }
 
 func TestSummarize_EmptyHistory(t *testing.T) {

@@ -47,7 +47,7 @@ func parse() options {
 	flag.DurationVar(&o.duration, "duration", 30*time.Second, "run length")
 	flag.DurationVar(&o.timeout, "timeout", 5*time.Second, "timeout of one attempt")
 	flag.Uint64Var(&o.seed, "seed", 1, "seed of the key choice")
-	flag.BoolVar(&o.snapshot, "snapshot", false, "read through snapshot: no read conflicts, breaks serializability on purpose")
+	flag.BoolVar(&o.snapshot, "snapshot", false, "read through snapshot: no read conflicts, may expose non-serializable histories")
 	flag.Parse()
 	return o
 }

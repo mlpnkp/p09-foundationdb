@@ -3,8 +3,9 @@
 # Usage: scripts/roles.sh
 set -euo pipefail
 
-cd "$(dirname "$0")/../cluster"
-docker compose exec -T fdb1 fdbcli --exec 'status json' --timeout 10 |
+here="$(cd "$(dirname "$0")" && pwd)"
+cd "$here/../cluster"
+"$here/compose.sh" exec -T fdb1 fdbcli --exec 'status json' --timeout 10 |
   python3 -c '
 import json, sys
 status = json.load(sys.stdin)

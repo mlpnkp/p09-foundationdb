@@ -1,0 +1,10 @@
+command: scripts/check-kill.sh auto 100
+date: 2026-11-01
+
+acknowledged writes: 100
+roles of fdb2 before kill:
+10.89.9.12:4500 fdb2 coordinator log resolver storage
+killed fdb2
+first committed write after kill: 4327 ms (failed attempts: 3)
+missing acknowledged writes: 0 of 100
+recovery_state: fully_recovered

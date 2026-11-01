@@ -8,21 +8,25 @@ import (
 )
 
 type Summary struct {
-	Txns          int
-	Committed     int
-	Attempts      int
-	Conflicts     int
-	Unknown       int
-	Aborted       int
-	ConflictRate  float64
-	RetriesPerTxn float64
-	Throughput    float64
-	P50, P95, P99 time.Duration
+	Txns           int
+	Committed      int
+	Attempts       int
+	Conflicts      int
+	Unknown        int
+	Aborted        int
+	ConflictRate   float64
+	RetriedTxns    int
+	RetriedRate    float64
+	RetriesPerTxn  float64
+	Throughput     float64
+	AvgConcurrency float64
+	P50, P95, P99  time.Duration
 }
 
 type txnSpan struct {
 	start     time.Time
 	committed time.Time
+	attempts  int
 }
 
 func Summarize(history []domain.Attempt) Summary {
@@ -30,11 +34,13 @@ func Summarize(history []domain.Attempt) Summary {
 		return Summary{}
 	}
 	var s Summary
+	var attemptTime time.Duration
 	spans := make(map[domain.TxnID]*txnSpan)
 	first, last := history[0].Start, history[0].End
 	for i := range history {
 		a := &history[i]
 		s.count(a.Outcome)
+		attemptTime += a.End.Sub(a.Start)
 		first = earliest(first, a.Start)
 		last = latest(last, a.End)
 		span, ok := spans[a.Txn]
@@ -43,6 +49,7 @@ func Summarize(history []domain.Attempt) Summary {
 			spans[a.Txn] = span
 		}
 		span.start = earliest(span.start, a.Start)
+		span.attempts++
 		if a.Outcome.Committed() {
 			span.committed = a.End
 		}
@@ -52,6 +59,9 @@ func Summarize(history []domain.Attempt) Summary {
 	for _, span := range spans {
 		if !span.committed.IsZero() {
 			latencies = append(latencies, span.committed.Sub(span.start))
+			if span.attempts > 1 {
+				s.RetriedTxns++
+			}
 		}
 	}
 	slices.Sort(latencies)
@@ -59,9 +69,13 @@ func Summarize(history []domain.Attempt) Summary {
 	s.Txns = len(spans)
 	s.Committed = len(latencies)
 	s.ConflictRate = float64(s.Conflicts) / float64(s.Attempts)
+	if s.Committed > 0 {
+		s.RetriedRate = float64(s.RetriedTxns) / float64(s.Committed)
+	}
 	s.RetriesPerTxn = float64(s.Attempts-s.Txns) / float64(s.Txns)
 	if window := last.Sub(first).Seconds(); window > 0 {
 		s.Throughput = float64(s.Committed) / window
+		s.AvgConcurrency = attemptTime.Seconds() / window
 	}
 	s.P50 = percentile(latencies, 50)
 	s.P95 = percentile(latencies, 95)
