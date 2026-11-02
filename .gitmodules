@@ -1,0 +1,3 @@
+[submodule "nis2"]
+	path = nis2
+	url = https://distsys.ru/osukhoroslov/nis2.git
