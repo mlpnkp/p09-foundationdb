@@ -1,0 +1,6 @@
+results/checks/journal-sample-hot100.jsonl
+  txns 18, committed 14, attempts 20
+  conflicts 6 (30.0% of attempts), unknown 0, aborted 0
+  retried txns 1 (7.1% of committed), retries per txn 0.111
+  throughput 1097.8 txn/s, average concurrency 5.17
+  latency p50 3.249709ms, p95 9.791959ms, p99 9.791959ms

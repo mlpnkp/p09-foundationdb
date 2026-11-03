@@ -4,7 +4,7 @@
 name: p09-fdb
 
 x-fdb: &fdb
-  image: foundationdb/foundationdb:8.0.0
+  image: foundationdb/foundationdb@sha256:ba3676ca97f9b674c571b8296a5d9009dd3e7494226a20d184a19df73be0abf9
   environment:
     FDB_CLUSTER_FILE_CONTENTS: "p09:p09@10.89.9.11:4500,10.89.9.12:4500,10.89.9.13:4500"
     FDB_NETWORKING_MODE: container

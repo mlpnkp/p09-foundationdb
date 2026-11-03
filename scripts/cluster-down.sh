@@ -3,5 +3,6 @@
 # Usage: scripts/cluster-down.sh
 set -euo pipefail
 
-cd "$(dirname "$0")/../cluster"
-docker compose down -v
+here="$(cd "$(dirname "$0")" && pwd)"
+cd "$here/../cluster"
+"$here/compose.sh" down -v

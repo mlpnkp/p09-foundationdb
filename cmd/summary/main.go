@@ -26,10 +26,11 @@ func run() error {
 			return err
 		}
 		s := app.Summarize(history)
-		fmt.Printf("%s\n  txns %d, committed %d, attempts %d\n  conflicts %d (%.1f%% of attempts), unknown %d, aborted %d\n  retries per txn %.3f, throughput %.1f txn/s\n  latency p50 %v, p95 %v, p99 %v\n",
+		fmt.Printf("%s\n  txns %d, committed %d, attempts %d\n  conflicts %d (%.1f%% of attempts), unknown %d, aborted %d\n  retried txns %d (%.1f%% of committed), retries per txn %.3f\n  throughput %.1f txn/s, average concurrency %.2f\n  latency p50 %v, p95 %v, p99 %v\n",
 			path, s.Txns, s.Committed, s.Attempts,
 			s.Conflicts, 100*s.ConflictRate, s.Unknown, s.Aborted,
-			s.RetriesPerTxn, s.Throughput,
+			s.RetriedTxns, 100*s.RetriedRate, s.RetriesPerTxn,
+			s.Throughput, s.AvgConcurrency,
 			s.P50, s.P95, s.P99)
 	}
 	return nil

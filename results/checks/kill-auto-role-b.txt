@@ -1,0 +1,8 @@
+$ scripts/check-kill.sh auto 100
+acknowledged writes: 100
+roles of fdb4 before kill:
+10.89.9.14:4500 fdb4 commit_proxy log storage
+killed fdb4
+first committed write after kill: 4329 ms (failed attempts: 3)
+missing acknowledged writes: 0 of 100
+recovery_state: fully_recovered
