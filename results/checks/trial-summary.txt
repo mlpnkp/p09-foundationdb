@@ -1,0 +1,20 @@
+/runs/trial-hot10000.jsonl
+  txns 48652, committed 48652, attempts 49055
+  conflicts 403 (0.8% of attempts), unknown 0, aborted 0
+  retries per txn 0.008, throughput 2428.9 txn/s
+  latency p50 2.851292ms, p95 5.792125ms, p99 9.349709ms
+/runs/trial-hot100.jsonl
+  txns 25907, committed 25902, attempts 35028
+  conflicts 9126 (26.1% of attempts), unknown 0, aborted 0
+  retries per txn 0.352, throughput 1294.7 txn/s
+  latency p50 2.0705ms, p95 21.95825ms, p99 56.743291ms
+/runs/trial-hot10.jsonl
+  txns 12031, committed 12024, attempts 13676
+  conflicts 1652 (12.1% of attempts), unknown 0, aborted 0
+  retries per txn 0.137, throughput 601.2 txn/s
+  latency p50 1.65175ms, p95 2.660417ms, p99 129.0505ms
+/runs/trial-snapshot-hot10.jsonl
+  txns 38003, committed 38003, attempts 38003
+  conflicts 0 (0.0% of attempts), unknown 0, aborted 0
+  retries per txn 0.000, throughput 3798.5 txn/s
+  latency p50 1.886167ms, p95 2.6955ms, p99 5.843791ms

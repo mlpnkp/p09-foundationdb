@@ -1,0 +1,7 @@
+acknowledged writes: 100
+roles of fdb5 before kill:
+10.89.9.15:4500 fdb5 commit_proxy consistency_scan data_distributor log ratekeeper storage
+killed fdb5
+first committed write after kill: 4354 ms (failed attempts: 3)
+missing acknowledged writes: 0 of 100
+recovery_state: all_logs_recruited
